@@ -112,12 +112,5 @@ function block_aria_landmark_roles_preprocess_block(&$variables) {
   if (!empty($role)) {
     // Add the role into the attributes array.
     $variables['attributes_array']['role'] = $role;
-    
-    // Create a new separate variable.
-    $variables['aria_role'] = 'role="' . $role . '"';
-  }
-  else {
-    // Create an empty ARIA role variable as a fallback.
-    $variables['aria_role'] = NULL;
   }
 }
