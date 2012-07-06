@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Blocks ARIA Landmark Roles 
+ * module.
+ */
+ 
+/**
+ * Implements hook_schema().
+ *
+ * Creates a new database table when the module is installed.
+ */
+function block_aria_landmark_roles_schema() {
+  $schema['block_aria_landmark_roles'] = array(
+    'description' => 'Stores ARIA landmark roles assigned to blocks',
+    'fields' => array(
+      'module' => array(
+        'description' => 'The name of the module that generates the block',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'delta' => array(
+        'description' => 'The delta value of the block',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'aria_role' => array(
+        'description' => 'The assigned ARIA landmark role',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'default' => '',
+      ),
+    ),
+    'primary key' => array('module'),
+  );
+    
+  return $schema;
+}
