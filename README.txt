@@ -21,7 +21,15 @@ INSTALLATION
 
 See http://drupal.org/documentation/install/modules-themes/modules-7.
 
-Author
+USAGE
+-----
+
+Ensure that the attributes variable is being printed within your block.tpl.php
+file - the block module's default template does this by default. For example:
+
+<div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+
+AUTHOR
 ------
 
 Oliver Davies
