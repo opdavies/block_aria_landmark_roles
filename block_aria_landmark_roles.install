@@ -7,7 +7,7 @@
  */
  
 /**
- * Implements hook_schema().
+ * Implementation of hook_schema().
  *
  * Creates a new database table when the module is installed.
  */
@@ -41,4 +41,20 @@ function block_aria_landmark_roles_schema() {
   );
     
   return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function block_aria_landmark_roles_install() {
+  // Create the database table.
+  drupal_install_schema('block_aria_landmark_roles');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function block_aria_landmark_roles_uninstall() {
+  // Delete the database table.
+  drupal_uninstall_schema('block_aria_landmark_roles');
 }
