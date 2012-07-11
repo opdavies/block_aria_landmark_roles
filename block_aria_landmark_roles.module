@@ -27,32 +27,13 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
     );
     $form['block_aria_role']['aria_role'] = array(
       '#title' => t('ARIA Landmark Role'),
-      '#type' => 'textfield',
+      '#type' => 'select',
+      '#options' => drupal_map_assoc(array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo')),
       '#default_value' => block_aria_landmark_roles_get_role($block),
     );
     
-    // Add extra validation and submission functions.
-    $form['#validate'][] = 'block_aria_landmark_roles_form_validate';
+    // Add extra submission function.
     $form['#submit'][] = 'block_aria_landmark_roles_form_submit';
-  }
-}
-
-/**
- * Form validation handler for the ARIA landmark role.
- *
- * Ensures that a valid landmark role has been specified.
- */
-function block_aria_landmark_roles_form_validate($form, &$form_state) {
-  if (isset($form_state['values']['aria_role'])) {
-    // Valid ARIA landmark roles.
-    $valid_roles = array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo');
-    
-    // If the submitted value is not valid, display an error message.
-    if (!in_array($form_state['values']['aria_role'], $valid_roles)) {
-      form_set_error('aria_role', t('%role is not a valid ARIA landmark role.', array(
-        '%role' => $form_state['values']['aria_role'],
-      )));
-    }
   }
 }
 
