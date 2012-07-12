@@ -1,3 +1,4 @@
+
 ABOUT THIS MOUDLE
 -----------------
 
@@ -19,18 +20,27 @@ http://www.nomensa.com/blog/2010/wai-aria-document-landmark-roles.
 INSTALLATION
 ------------
 
-See http://drupal.org/documentation/install/modules-themes/modules-7.
+See http://drupal.org/documentation/install/modules-themes/modules-6.
 
 USAGE
 -----
 
-Ensure that the attributes variable is being printed within your block.tpl.php
-file - the block module's default template does this by default. For example:
+Within your block.tpl.php, include the following snippet within the opening div
+tag:
 
-<div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
+<?php print $aria_role; ?>
+
+Here is the first line of Garland's block.tpl.php before the code is inserted:
+
+<div id="block-<?php print $block->module .'-'. $block->delta; ?>" class="block block-<?php print $block->module ?>">
+
+And here's what the code should look like after adding the snippet:
+
+<div id="block-<?php print $block->module .'-'. $block->delta; ?>" class="block block-<?php print $block->module ?>" <?php print $aria_role; ?>>
+
+IMPORTANT: Remember to separate the PHP snippet from the existing markup with a single space.
 
 AUTHOR
 ------
 
-Oliver Davies
-http://drupal.org/user/381388
+Oliver Davies (http://drupal.org/user/381388)
