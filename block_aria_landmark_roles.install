@@ -15,12 +15,6 @@ function block_aria_landmark_roles_schema() {
   $schema['block_aria_landmark_roles'] = array(
     'description' => 'Stores ARIA landmark roles assigned to blocks',
     'fields' => array(
-			'id' => array(
-				'description' => 'The auto-generated ID',
-				'type' => 'serial',
-				'length' => 11,
-				'not null' => TRUE,
- 			),
       'module' => array(
         'description' => 'The name of the module that generates the block',
         'type' => 'varchar',
@@ -35,7 +29,7 @@ function block_aria_landmark_roles_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'aria_role' => array(
+      'role' => array(
         'description' => 'The assigned landmark role',
         'type' => 'varchar',
         'length' => '255',
@@ -43,7 +37,6 @@ function block_aria_landmark_roles_schema() {
         'default' => '',
       ),
     ),
-    'primary key' => array('id'),
   );
     
   return $schema;
@@ -57,19 +50,16 @@ function block_aria_landmark_roles_update_7100() {
 }
 
 /**
- * Adds the ID column.
+ * Rename the 'aria_role' column to 'role'.
  */
 function block_aria_landmark_roles_update_7101() {
-  $id_spec = array(
-    'description' => 'The auto-generated ID.',
-    'type' => 'serial',
-    'length' => 11,
+  $spec = array(
+    'description' => 'The assigned landmark role',
+    'type' => 'varchar',
+    'length' => '255',
     'not null' => TRUE,
-  );
-
-  $keys_new = array(
-	  'primary key' => array('id'),
+    'default' => '',
   );
   
-  db_add_field('block_aria_landmark_roles', 'id', $id_spec, $keys_new);
+  db_change_field('block_aria_landmark_roles', 'aria_role', 'role', $spec);
 }
