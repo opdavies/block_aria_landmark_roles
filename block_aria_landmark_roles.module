@@ -24,11 +24,11 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
       '#collapsible' => TRUE,
       '#weight' => 0,
     );
-    $form['block_aria_role']['aria_role'] = array(
+    $form['block_aria_role']['role'] = array(
       '#title' => t('ARIA Landmark Role'),
       '#description' => t('Specify a ARIA landmark role to add to this block.'),
       '#type' => 'textfield',
-      '#default_value' => block_aria_landmark_roles_get_role($block),
+      '#default_value' => _block_aria_landmark_roles_get_role($block),
     );
     
     // Add extra submission function.
@@ -43,11 +43,11 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
  * Ensures that the ARIA landmark role is valid.
  */
 function block_aria_landmark_roles_form_validate($form, &$form_state) {
-  if (!empty($form_state['values']['aria_role'])) {
+  if (!empty($form_state['values']['role'])) {
     // Confirm that the entered role is valid.
     $valid_roles = array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo');
-    if (!in_array($form_state['values']['aria_role'], $valid_roles)) {
-      form_set_error('aria_role', t('%role is not a valid ARIA landmark role.', array('%role' => $form_state['values']['aria_role'])));
+    if (!in_array($form_state['values']['role'], $valid_roles)) {
+      form_set_error('role', t('%role is not a valid ARIA landmark role.', array('%role' => $form_state['values']['role'])));
     }
   }
 }
@@ -58,20 +58,20 @@ function block_aria_landmark_roles_form_validate($form, &$form_state) {
  * Saves the data to the block_aria_landmark_roles table.
  */
 function block_aria_landmark_roles_form_submit($form, &$form_state) {
-  if (isset($form_state['values']['aria_role']) && user_access('administer blocks')) {
+  if (isset($form_state['values']['role']) && user_access('administer blocks')) {
     $module = $form_state['values']['module'];
     $delta = $form_state['values']['delta'];
-    $role = $form_state['values']['aria_role'];
+    $role = $form_state['values']['role'];
     
     // Delete any existing role.
     db_query("DELETE FROM {block_aria_landmark_roles} WHERE module = '%s' AND delta = '%s'", $module, $delta);
     
     // Save the new role.
-    if (!empty($form_state['values']['aria_role'])) {
+    if (!empty($form_state['values']['role'])) {
       $record = new stdClass;
       $record->module = $module;
       $record->delta = $delta;
-      $record->aria_role = $role;
+      $record->role = $role;
       drupal_write_record('block_aria_landmark_roles', $record);
     }
   }
@@ -86,8 +86,8 @@ function block_aria_landmark_roles_form_submit($form, &$form_state) {
  * @return string|bool
  *  Returns the role if one was found. If not, returns nothing.
  */
-function block_aria_landmark_roles_get_role($block) {
-  $role = db_result(db_query("SELECT aria_role FROM {block_aria_landmark_roles} WHERE module = '%s' AND delta = '%s'", $block->module, $block->delta));
+function _block_aria_landmark_roles_get_role($block) {
+  $role = db_result(db_query("SELECT role FROM {block_aria_landmark_roles} WHERE module = '%s' AND delta = '%s'", $block->module, $block->delta));
   return $role ? $role : '';
 }
 
@@ -99,6 +99,6 @@ function block_aria_landmark_roles_preprocess_block(&$variables) {
     'module' => $variables['block']->module,
     'delta' => $variables['block']->delta,
   );
-  $role = block_aria_landmark_roles_get_role($block);
+  $role = _block_aria_landmark_roles_get_role($block);
   $variables['aria_role'] = ($role) ? 'role="' . $role . '"' : NULL;
 }
