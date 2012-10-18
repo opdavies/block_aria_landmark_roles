@@ -29,7 +29,7 @@ function block_aria_landmark_roles_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'aria_role' => array(
+      'role' => array(
         'description' => 'The assigned ARIA landmark role',
         'type' => 'varchar',
         'length' => '255',
