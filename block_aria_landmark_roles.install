@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the Blocks ARIA Landmark Roles 
+ * Install, update, and uninstall functions for the Blocks ARIA Landmark Roles
  * module.
  */
- 
+
 /**
  * Implementation of hook_schema().
  *
@@ -37,9 +37,8 @@ function block_aria_landmark_roles_schema() {
         'default' => '',
       ),
     ),
-    'primary key' => array('module'),
   );
-    
+
   return $schema;
 }
 
@@ -57,4 +56,33 @@ function block_aria_landmark_roles_install() {
 function block_aria_landmark_roles_uninstall() {
   // Delete the database table.
   drupal_uninstall_schema('block_aria_landmark_roles');
+}
+
+/**
+ * Removed the primary key from the block_aria_landmark_roles table.
+ */
+function block_aria_landmark_roles_update_6100() {
+	$ret = array();
+	
+  db_drop_primary_key($ret, 'block_aria_landmark_roles');
+
+  return $ret;
+}
+
+/**
+ * Removed the primary key from the block_aria_landmark_roles table.
+ */
+function block_aria_landmark_roles_update_6101() {
+  $ret = array();
+
+	$spec = array(
+		'description' => 'The assigned ARIA landmark role',
+    'type' => 'varchar',
+    'length' => '255',
+    'not null' => TRUE,
+    'default' => '',
+	);
+	db_change_field($ret, 'block_aria_landmark_roles', 'aria_role', 'role', $spec);
+
+	return $ret;
 }
