@@ -17,7 +17,7 @@ function block_aria_landmark_roles_schema() {
     'fields' => array(
 			'id' => array(
 				'description' => 'The auto-generated ID',
-				'type' => 'int',
+				'type' => 'serial',
 				'length' => 11,
 				'not null' => TRUE,
  			),
@@ -35,7 +35,7 @@ function block_aria_landmark_roles_schema() {
         'not null' => TRUE,
         'default' => '',
       ),
-      'role' => array(
+      'aria_role' => array(
         'description' => 'The assigned landmark role',
         'type' => 'varchar',
         'length' => '255',
@@ -47,4 +47,29 @@ function block_aria_landmark_roles_schema() {
   );
     
   return $schema;
+}
+
+/**
+ * Remove the primary key from the table.
+ */
+function block_aria_landmark_roles_update_7100() {
+  db_drop_primary_key('block_aria_landmark_roles');
+}
+
+/**
+ * Adds the ID column.
+ */
+function block_aria_landmark_roles_update_7101() {
+  $id_spec = array(
+    'description' => 'The auto-generated ID.',
+    'type' => 'serial',
+    'length' => 11,
+    'not null' => TRUE,
+  );
+
+  $keys_new = array(
+	  'primary key' => array('id'),
+  );
+  
+  db_add_field('block_aria_landmark_roles', 'id', $id_spec, $keys_new);
 }
