@@ -1,0 +1,8 @@
+name: Block ARIA Landmark Roles
+type: module
+description: 'Adds additional elements on block administration forms to add ARIA landmark roles.'
+package: Accessibility
+core: 8.x
+
+dependencies:
+- block

@@ -1,5 +1,0 @@
-name = Block ARIA Landmark Roles
-description = Adds additional elements on block administration forms to add ARIA landmark roles.
-core = 7.x
-package = Accessibility
-dependencies[] = block
