@@ -10,33 +10,30 @@
  *
  * Adds additional elements to the 'add block' and 'configure block' forms.
  */
-function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {  
-  if ($form_id == 'block_add_block_form' || $form_id == 'block_admin_configure') {  
-    // Build the block object.
-    $block = new stdClass;
-    $block->module = $form['module']['#value'];
-    $block->delta = $form['delta']['#value'];
-    
-    $options[] = t('- None -');  
-    $options += drupal_map_assoc(array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo'));
-	
-    // Create the additional form elements.
-    $form['block_aria_role'] = array(
-      '#title' => t('Block ARIA Landmark Role settings'),
-      '#type' => 'fieldset',
-      '#collapsible' => TRUE,
-      '#weight' => 0,
-    );
-    $form['block_aria_role']['role'] = array(
-      '#title' => t('ARIA Landmark Role'),
-      '#description' => t('Specify an ARIA landmark role to add to this block.'),
-      '#type' => 'select',
-			'#options' => $options,
-      '#default_value' => _block_aria_landmark_roles_get_role($block),
-    );
-    
-    $form['#submit'][] = 'block_aria_landmark_roles_form_submit';
-  }
+function block_aria_landmark_roles_form_block_form_alter(&$form, &$form_state) {
+  $block->module = $form['settings']['module']['#value'];
+  $block->delta = $form['delta']['#value'];
+
+  $options[] = t('- None -');
+  $options += drupal_map_assoc(array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo'));
+
+  // Create the additional form elements.
+  $form['block_aria_role'] = array(
+    '#title' => t('Block ARIA Landmark Role settings'),
+    '#type' => 'details',
+    '#open' => TRUE,
+    '#weight' => 0,
+  );
+
+  $form['block_aria_role']['role'] = array(
+    '#title' => t('ARIA Landmark Role'),
+    '#description' => t('Specify an ARIA landmark role to add to this block.'),
+    '#type' => 'select',
+		'#options' => $options,
+    '#default_value' => _block_aria_landmark_roles_get_role($block),
+  );
+
+  $form['#submit'][] = 'block_aria_landmark_roles_form_submit';
 }
 
 /**
