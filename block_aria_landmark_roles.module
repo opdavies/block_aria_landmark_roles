@@ -25,7 +25,6 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
       '#title' => t('Block ARIA Landmark Role settings'),
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
-      '#weight' => 0,
     );
     $form['block_aria_role']['role'] = array(
       '#title' => t('ARIA Landmark Role'),
