@@ -16,10 +16,10 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
     $block = new stdClass;
     $block->module = $form['module']['#value'];
     $block->delta = $form['delta']['#value'];
-    
+
     $options[] = t('- None -');  
     $options += drupal_map_assoc(array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo'));
-	
+
     // Create the additional form elements.
     $form['block_aria_role'] = array(
       '#title' => t('Block ARIA Landmark Role settings'),
@@ -30,10 +30,10 @@ function block_aria_landmark_roles_form_alter(&$form, &$form_state, $form_id) {
       '#title' => t('ARIA Landmark Role'),
       '#description' => t('Specify an ARIA landmark role to add to this block.'),
       '#type' => 'select',
-			'#options' => $options,
+      '#options' => $options,
       '#default_value' => _block_aria_landmark_roles_get_role($block),
     );
-    
+
     $form['#submit'][] = 'block_aria_landmark_roles_form_submit';
   }
 }
@@ -54,7 +54,7 @@ function block_aria_landmark_roles_form_submit($form, &$form_state) {
       ->condition('module', $module)
       ->condition('delta', $delta)
       ->execute();
-    
+
     // Save the new role.
     if (!empty($form_state['values']['role'])) {
       db_insert('block_aria_landmark_roles')
@@ -78,7 +78,7 @@ function _block_aria_landmark_roles_get_role($block) {
     ':module' => $block->module,
     ':delta' => $block->delta,
   ))->fetchField();
-  
+
   return $role ? $role : '';
 }
 
@@ -90,7 +90,7 @@ function _block_aria_landmark_roles_get_role($block) {
 function block_aria_landmark_roles_preprocess_block(&$variables) {
   $block = $variables['block'];
   $role = _block_aria_landmark_roles_get_role($block);
-  
+
   if (!empty($role)) {
     // Add the role into the attributes array.
     $variables['attributes_array']['role'] = $role;

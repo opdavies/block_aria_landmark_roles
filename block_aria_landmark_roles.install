@@ -38,7 +38,7 @@ function block_aria_landmark_roles_schema() {
       ),
     ),
   );
-    
+
   return $schema;
 }
 
@@ -60,6 +60,6 @@ function block_aria_landmark_roles_update_7101() {
     'not null' => TRUE,
     'default' => '',
   );
-  
+
   db_change_field('block_aria_landmark_roles', 'aria_role', 'role', $spec);
 }
