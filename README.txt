@@ -16,21 +16,8 @@ features which they can use to identify and navigate to sections of page content
 For further information, go to http://www.w3.org/WAI/PF/aria or 
 http://www.nomensa.com/blog/2010/wai-aria-document-landmark-roles.
 
-INSTALLATION
-------------
-
-See http://drupal.org/documentation/install/modules-themes/modules-7.
-
-USAGE
------
-
-Ensure that the attributes variable is being printed within your block.tpl.php
-file - the block module's default template does this by default. For example:
-
-<div id="<?php print $block_html_id; ?>" class="<?php print $classes; ?>"<?php print $attributes; ?>>
-
 AUTHOR
 ------
 
 Oliver Davies
-http://drupal.org/user/381388
+https://www.drupal.org/u/opdavies

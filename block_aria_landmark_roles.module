@@ -2,95 +2,60 @@
 
 /**
  * @file
- * Adds additional elements on block administration forms to add ARIA landmark roles.
+ * Add ARIA landmark roles to Drupal blocks.
  */
+
+use Drupal\block\Entity\Block;
+use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Implements hook_form_alter().
- *
- * Adds additional elements to the 'add block' and 'configure block' forms.
+ * Implements hook_form_FORM_ID_alter().
  */
-function block_aria_landmark_roles_form_block_form_alter(&$form, &$form_state) {
-  $block->module = $form['settings']['module']['#value'];
-  $block->delta = $form['delta']['#value'];
+function block_aria_landmark_roles_form_block_form_alter(&$form, FormStateInterface $form_state) {
+  /** @var Block $block */
+  $block = $form_state->getFormObject()->getEntity();
 
-  $options[] = t('- None -');
-  $options += drupal_map_assoc(array('banner', 'navigation', 'search', 'main', 'complementary', 'contentinfo'));
+  $form['third_party_settings']['#tree'] = TRUE;
 
-  // Create the additional form elements.
-  $form['block_aria_role'] = array(
-    '#title' => t('Block ARIA Landmark Role settings'),
-    '#type' => 'details',
-    '#open' => TRUE,
-    '#weight' => 0,
-  );
-
-  $form['block_aria_role']['role'] = array(
-    '#title' => t('ARIA Landmark Role'),
-    '#description' => t('Specify an ARIA landmark role to add to this block.'),
+  $form['third_party_settings']['block_aria_landmark_roles']['role'] = [
+    '#title' => t('ARIA landmark role'),
+    '#description' => t('Add a landmark role to this block.'),
     '#type' => 'select',
-		'#options' => $options,
-    '#default_value' => _block_aria_landmark_roles_get_role($block),
-  );
-
-  $form['#submit'][] = 'block_aria_landmark_roles_form_submit';
+    '#options' => ['' => t('- None -')] + _block_aria_landmark_roles_get_roles(),
+    '#default_value' => $block->getThirdPartySetting('block_aria_landmark_roles', 'roles'),
+  ];
 }
 
 /**
- * Form submission handler for the ARIA landmark role.
- *
- * Saves the data to the block_aria_landmark_roles table.
+ * Implements hook_preprocess_HOOK().
  */
-function block_aria_landmark_roles_form_submit($form, &$form_state) {
-  if (isset($form_state['values']['role']) && user_access('administer blocks')) {
-    $module = $form_state['values']['module'];
-    $delta = $form_state['values']['delta'];
-    $role = $form_state['values']['role'];
+function block_aria_landmark_roles_preprocess_block(&$variables) {
+  if (!empty($variables['elements']['#id'])) {
+    $block = Block::load($variables['elements']['#id']);
 
-    // Delete any existing role.
-    db_delete('block_aria_landmark_roles')
-      ->condition('module', $module)
-      ->condition('delta', $delta)
-      ->execute();
-    
-    // Save the new role.
-    if (!empty($form_state['values']['role'])) {
-      db_insert('block_aria_landmark_roles')
-        ->fields(array('module' => $module, 'delta' => $delta, 'role' => $role))
-        ->execute();
+    if ($role = $block->getThirdPartySetting('block_aria_landmark_roles', 'role')) {
+      $variables['attributes']['role'] = $role;
     }
   }
 }
 
 /**
- * Find an ARIA landmark role for a certain block.
+ * Return a list ARIA roles.
  *
- * @param obj $block
- *  An object containing the name of the module and the delta of the block.
+ * @param bool $associative
+ *   (optional) Whether to return an associative array. Defaults to TRUE.
  *
- * @return string|bool
- *  Returns the role if one was found. If not, returns nothing.
+ * @return array
  */
-function _block_aria_landmark_roles_get_role($block) {
-  $role = db_query('SELECT role FROM {block_aria_landmark_roles} WHERE module = :module AND delta = :delta', array(
-    ':module' => $block->module,
-    ':delta' => $block->delta,
-  ))->fetchField();
-  
-  return $role ? $role : '';
-}
+function _block_aria_landmark_roles_get_roles($associative = TRUE) {
+  $roles = [
+    'banner',
+    'complementary',
+    'contentinfo',
+    'main',
+    'navigation',
+    'search',
+  ];
 
-/**
- * Implements hook_preprocess() for blocks.
- *
- * Adds additional variables for ARIA landmark roles.
- */
-function block_aria_landmark_roles_preprocess_block(&$variables) {
-  $block = $variables['block'];
-  $role = _block_aria_landmark_roles_get_role($block);
-  
-  if (!empty($role)) {
-    // Add the role into the attributes array.
-    $variables['attributes_array']['role'] = $role;
-  }
+  return $associative ? array_combine($roles, $roles) : $roles;
 }

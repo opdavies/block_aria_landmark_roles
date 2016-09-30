@@ -1,8 +1,8 @@
 name: Block ARIA Landmark Roles
 type: module
-description: 'Adds additional elements on block administration forms to add ARIA landmark roles.'
+description: 'Add ARIA landmark roles to Drupal blocks.'
 package: Accessibility
 core: 8.x
 
 dependencies:
-- block
+  - block
