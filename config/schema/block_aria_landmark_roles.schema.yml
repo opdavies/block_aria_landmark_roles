@@ -2,6 +2,6 @@ block.block.*.third_party.block_aria_landmark_roles:
   type: mapping
   label: Block ARIA Landmark Roles third party settings
   mapping:
-    classes:
+    role:
       type: string
       label: A landmark role for the block
