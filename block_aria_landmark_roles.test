@@ -1,0 +1,47 @@
+<?php
+
+class BlockAriaLandmarkRolesTest extends DrupalWebTestCase {
+  /**
+   * @var stdClass
+   */
+  private $admin_user;
+
+  private $output = 'id="block-system-main" class="block block-system" role="banner"';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp(array('block_aria_landmark_roles'));
+
+    $this->admin_user = $this->drupalCreateUser(array('administer blocks'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Block ARIA Landmark Roles',
+      'description' => '',
+      'group' => 'Block ARIA Landmark Roles',
+    );
+  }
+
+  public function testAddingARole() {
+    // Ensure that the markup isn’t already there.
+    $this->assertNoRaw($this->output);
+
+    $this->drupalLogin($this->admin_user);
+
+    $path = 'admin/structure/block/manage/system/main/configure';
+    $edit = array(
+      'role' => 'banner',
+    );
+
+    $this->drupalPost($path, $edit, t('Save block'));
+
+    // Ensure that the markup is there after adding a role.
+    $this->assertRaw($this->output);
+  }
+}
